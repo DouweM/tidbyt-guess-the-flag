@@ -1,0 +1,39 @@
+version: 1
+project_id: 87a2eed4-5503-47f7-a76b-f8396538d763
+send_anonymous_usage_stats: false
+default_environment: dev
+environments:
+- name: dev
+
+jobs:
+- name: webp
+  tasks:
+  - tap-pixlet target-webp
+- name: tidbyt
+  tasks:
+  - tap-pixlet target-tidbyt
+
+plugins:
+  extractors:
+  - name: tap-pixlet
+    namespace: tap_pixlet
+    pip_url: git+https://github.com/DouweM/tap-pixlet.git -r requirements.txt
+    settings:
+    - name: background
+      kind: boolean
+    - name: magnification
+      kind: integer
+    config:
+      path: common-misconceptions.star
+
+  loaders:
+  - name: target-webp
+    namespace: target_webp
+    pip_url: git+https://github.com/DouweM/target-webp.git
+
+  - name: target-tidbyt
+    namespace: target_tidbyt
+    pip_url: git+https://github.com/DouweM/target-tidbyt.git
+    config:
+      device_id: $TIDBYT_DEVICE_ID
+      token: $TIDBYT_TOKEN

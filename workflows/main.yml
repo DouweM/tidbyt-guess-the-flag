@@ -1,0 +1,40 @@
+name: Render app to image
+
+on:
+  push:
+  schedule:
+  - cron: "0 0 * * 0"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Pixlet
+        run: |
+          export PIXLET_VERSION=$(curl https://raw.githubusercontent.com/tidbyt/community/main/PIXLET_VERSION | sed 's/v//')
+          echo $PIXLET_VERSION
+          curl -L -o pixlet.tar.gz https://github.com/tidbyt/pixlet/releases/download/v${PIXLET_VERSION}/pixlet_${PIXLET_VERSION}_linux_amd64.tar.gz
+          tar -xvf pixlet.tar.gz
+          chmod +x ./pixlet
+          mv pixlet /usr/local/bin/pixlet
+      - name: Install Python
+        uses: actions/setup-python@v4.7.0
+        with:
+          python-version: 3.11.1
+      - name: Install Meltano
+        run: pip install meltano
+      - name: Install Meltano plugins
+        run: meltano install
+      - name: Render app to image
+        env:
+          TAP_PIXLET_MAGNIFICATION: "8"
+        run: |
+          meltano run webp
+          mv output/**/*.webp output/image.webp
+      - name: Store image
+        uses: actions/upload-artifact@v3
+        with:
+          name: image
+          path: output/image.webp
