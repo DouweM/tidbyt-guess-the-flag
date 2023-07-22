@@ -17,14 +17,14 @@ plugins:
   extractors:
   - name: tap-pixlet
     namespace: tap_pixlet
-    pip_url: git+https://github.com/DouweM/tap-pixlet.git -r requirements.txt
+    pip_url: git+https://github.com/DouweM/tap-pixlet.git
     settings:
     - name: background
       kind: boolean
     - name: magnification
       kind: integer
     config:
-      path: common-misconceptions.star
+      path: guess-the-flag.star
 
   loaders:
   - name: target-webp
