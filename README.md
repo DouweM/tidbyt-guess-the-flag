@@ -9,7 +9,7 @@
 Note that this app **cannot be installed from Tidbyt's smartphone app** as it uses features that (for security reasons) are not supported in [community apps](https://tidbyt.dev/docs/publish/community-apps) that run on Tidbyt's official app server.
 (Your Tidbyt does not run apps directly; it depends on a server to periodically run apps and push the resulting images to the device.)
 
-Specifically, this app uses [Pixlib](https://github.com/DouweM/tap-pixlet/tree/main/tap_pixlet/pixlib), the unofficial standard library for [Pixlet](https://github.com/tidbyt/pixlet) (the Tidbyt app development framework), similar to how [Starlib](https://github.com/qri-io/starlib) is the unofficial standard library for [Starlark](https://github.com/google/starlark-go) (the Python-like language Tidbyt app are written in).
+Specifically, this app uses [Pixlib](https://github.com/DouweM/tap-pixlet/tree/main/tap_pixlet/pixlib), the unofficial standard library for [Pixlet](https://github.com/tidbyt/pixlet) (the Tidbyt app development framework), similar to how [Starlib](https://github.com/qri-io/starlib) is the unofficial standard library for [Starlark](https://github.com/google/starlark-go) (the Python-like language Tidbyt apps are written in).
 
 These features are enabled by [`tap-pixlet`](https://github.com/DouweM/tap-pixlet), an unofficial Tidbyt app runner that extends Pixlet with the Pixlib standard library and advanced abilities like reading local (image) files, reaching local network resources, and running Python scripts and packages.
 

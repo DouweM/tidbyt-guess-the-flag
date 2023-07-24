@@ -1,0 +1,14 @@
+jobs:
+- name: guess-the-flag
+  tasks:
+  - tap-pixlet--guess-the-flag target-tidbyt
+- name: guess-the-flag--webp
+  tasks:
+  - tap-pixlet--guess-the-flag target-webp
+
+plugins:
+  extractors:
+  - name: tap-pixlet--guess-the-flag
+    inherit_from: tap-pixlet
+    config:
+      path: apps/guess-the-flag
