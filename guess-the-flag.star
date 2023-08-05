@@ -31,6 +31,7 @@ def main(config):
   flag_widget = render.Image(src=flag, height=flag_height)
 
   return render.Root(
+    show_full_animation = True,
     child = animation.Transformation(
       child = render.Column(
         cross_align = "center",

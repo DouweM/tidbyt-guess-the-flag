@@ -4,109 +4,41 @@
 
 ![Screenshot](screenshot.webp)
 
----
-
-Note that this app **cannot be installed from Tidbyt's smartphone app** as it uses features that (for security reasons) are not supported in [community apps](https://tidbyt.dev/docs/publish/community-apps) that run on Tidbyt's official app server.
-(Your Tidbyt does not run apps directly; it depends on a server to periodically run apps and push the resulting images to the device.)
-
-Specifically, this app uses [Pixlib](https://github.com/DouweM/tap-pixlet/tree/main/tap_pixlet/pixlib), the unofficial standard library for [Pixlet](https://github.com/tidbyt/pixlet) (the Tidbyt app development framework), similar to how [Starlib](https://github.com/qri-io/starlib) is the unofficial standard library for [Starlark](https://github.com/google/starlark-go) (the Python-like language Tidbyt apps are written in).
-
-These features are enabled by [`tap-pixlet`](https://github.com/DouweM/tap-pixlet), an unofficial Tidbyt app runner that extends Pixlet with the Pixlib standard library and advanced abilities like reading local (image) files, reaching local network resources, and running Python scripts and packages.
-
-To render this app to your Tidbyt or a WebP image file, follow the instructions below.
-They use `tap-pixlet` to run the app, [`target-tidbyt`](https://github.com/DouweM/target-tidbyt) and [`target-webp`](https://github.com/DouweM/target-tidbyt) to push the resulting image to your Tidbyt or a WebP image file, and [Meltano](https://github.com/meltano/meltano) to tie these components together.
-You can use these same components to set up your own Tidbyt app server for apps like this one, that are too advanced for the official community app server.
-
 ## Installation
 
-1. Install [Pixlet](https://github.com/tidbyt/pixlet):
+This app is not available through Tidbyt's mobile app as it uses features that (for security reasons) are not supported in [community apps](https://tidbyt.dev/docs/publish/community-apps) that run on Tidbyt's official app server.
 
-    - On macOS:
+Instead, it needs to be run using [Pixbyt](https://pixbyt.dev), a self-hosted Tidbyt app server for advanced apps.
 
-      ```bash
-      brew install tidbyt/tidbyt/pixlet
-      ```
+### 1. Set up Pixbyt
 
-    - [Other operating systems](https://tidbyt.dev/docs/build/installing-pixlet)
+1. [Create your own Pixbyt repo](https://github.com/DouweM/pixbyt#1-create-your-own-pixbyt-repo)
+2. [Configure your Tidbyt](https://github.com/DouweM/pixbyt#2-configure-your-tidbyt)
 
-1. Install [Meltano](https://github.com/meltano/meltano):
+### 2. Install the app
 
-   - With `pip`:
-
-      ```bash
-      pip install meltano
-      ```
-
-   - [Other installation methods](https://docs.meltano.com/getting-started/installation)
-
-1. Clone this repository and enter the new directory:
+1. Add this repo as a submodule under `apps`:
 
     ```bash
-    git clone https://github.com/DouweM/tidbyt-guess-the-flag.git
-    cd tidbyt-guess-the-flag
+    git submodule add https://github.com/DouweM/tidbyt-guess-the-flag.git apps/guess-the-flag
     ```
 
-1. Install [`tap-pixlet`](https://github.com/DouweM/tap-pixlet), [`target-tidbyt`](https://github.com/DouweM/target-tidbyt), and [`target-webp`](https://github.com/DouweM/target-tidbyt) using Meltano:
+1. Add an update schedule to `apps.yml` under `schedules:`:
 
-    ```bash
-    meltano install
+    ```yaml
+    schedules:
+    # ...
+    - name: guess-the-flag
+      interval: '*/5 * * * *' # Every 5 minutes
+      job: guess-the-flag
     ```
 
 ## Usage
 
-### Render app to a WebP image file
+Build and launch your Pixbyt app server:
 
-The image will be created at `output/guess-the-flag/<timestamp>.webp`.
-The exact path is also printed in the command output.
-
-#### Regular size (64x32)
-
-```bash
-meltano run webp
-```
-
-#### Magnified 8 times (512x256)
-
-```bash
-TAP_PIXLET_MAGNIFICATION=8 meltano run webp
-```
-
-### Render app to your Tidbyt
-
-#### Configure your Tidbyt
-
-1. Create your own `.env` configuration file from the sample:
-
-   ```bash
-   cp .env.sample .env
-   ```
-
-1. Find your Device ID and your API Token in the Tidbyt smartphone app under Settings > General > Get API Key.
-
-1. Update `.env` with your configuration:
-
-   ```bash
-   TIDBYT_DEVICE_ID="<device ID>"
-   TIDBYT_TOKEN="<token>"
-   ```
-
-#### Send to foreground
-
-The app will immediately show up on your Tidbyt.
-This is useful during development.
-
-```bash
-TAP_PIXLET_BACKGROUND=false meltano run tidbyt
-```
-
-#### Send to background
-
-The app will be added to the Tidbyt app rotation.
-This is useful when you're running this command on a schedule, to make sure that the app will be up to date the next time it comes up in the app rotation.
-
-```bash
-meltano run tidbyt
-```
+1. [Build the app server](https://github.com/DouweM/pixbyt#4-build-the-app-server)
+1. [Launch the app server](https://github.com/DouweM/pixbyt#5-launch-the-app-server)
 
 ## Acknowledgements
 

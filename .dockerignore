@@ -1,4 +1,7 @@
-/.meltano
+/.git
+
+# .gitignore
+/.meltano/
 /output/
 /logs/
 /.env
